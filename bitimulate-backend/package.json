@@ -5,7 +5,8 @@
   "license": "MIT",
   "author": "softdev1029",
   "dependencies": {
-    "autobahn": "^18.10.2",
+    "axios": "^0.18.0",
+    "cross-env": "^5.2.0",
     "dotenv": "^7.0.0",
     "koa": "^2.7.0",
     "koa-router": "^7.4.0",
@@ -17,6 +18,7 @@
     "nodemon": "^1.18.10"
   },
   "scripts": {
-    "start:dev": "nodemon --watch src/ src/index.js"
+    "start:dev": "cross-env NODE_PATH=src nodemon --watch src/ src/index.js",
+    "crawler:dev": "cross-env NODE_PATH=src nodemon --watch src/crawler/ src/crawler/index.js"
   }
 }
