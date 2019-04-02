@@ -12,7 +12,28 @@ const ExchangeRate = new Schema({
   quoteVolume: Types.Double,
   isFrozen: Types.Double,
   high24hr: Types.Double,
-  low24hr: Types.Double
+  low24hr: Types.Double,
+  lastUpdated: {
+    type: Date,
+    default: new Date()
+  }
 });
+
+ExchangeRate.index({ name: 1 }, { name: "rateTypeIdentifier", unique: true });
+
+ExchangeRate.statics.updateTicker = function(name, data) {
+  return this.findOneAndUpdate(
+    { name },
+    {
+      ...data,
+      lastUpdated: new Date()
+    },
+    { upsert: false, new: true }
+  ).exec();
+};
+
+ExchangeRate.statics.drop = function() {
+  this.remove({}).exec();
+};
 
 module.exports = mongoose.model("ExchangeRate", ExchangeRate);
