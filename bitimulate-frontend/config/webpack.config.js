@@ -107,6 +107,7 @@ module.exports = function(webpackEnv) {
         loader: require.resolve(preProcessor),
         options: {
           sourceMap: isEnvProduction && shouldUseSourceMap,
+          includePaths: [paths.globalStyles],
         },
       });
     }
@@ -460,37 +461,6 @@ module.exports = function(webpackEnv) {
               options: {
                 name: 'static/media/[name].[hash:8].[ext]',
               },
-            },
-            {
-              test: /\.scss$/,
-              use: [
-                require.resolve('style-loader'),
-                {
-                  loader: require.resolve('css-loader'),
-                  options: {
-                    importLoaders: 1,
-                    modules: true,
-                    localIdentName: '[name]__[local]__[hash:base64:5]'
-                  },
-                },
-                {
-                  loader: require.resolve('postcss-loader'),
-                  options: {
-                    // Necessary for external CSS imports to work
-                    // https://github.com/facebookincubator/create-react-app/issues/2677
-                    ident: 'postcss',
-                    plugins: () => [
-                      require('postcss-flexbugs-fixes'),
-                    ],
-                  },
-                },
-                {
-                  loader: require.resolve('sass-loader'),
-                  options: {
-                    includePaths: [paths.globalStyles]
-                  }
-                }
-              ],
             },
             // ** STOP ** Are you adding a new loader?
             // Make sure to add the new loader(s) before the "file" loader.
