@@ -15,13 +15,13 @@ const handlers = {
 
     try {
       await ExchangeRate.updateTicker(name, rest);
+      console.log("[UPDATE]", name, new Date());
     } catch (e) {
       console.error(e);
     }
   }
 };
-db.connect();
-socket.connect();
+
 socket.handleMessage(message => {
   const parsed = parseJSON(message);
   if (!parsed) {
@@ -33,6 +33,10 @@ socket.handleMessage(message => {
   if (handlers[type]) {
     handlers[type](data);
   }
+});
+
+socket.handleRefresh(() => {
+  updateEntireRate();
 });
 
 async function registerInitialExchangeRate() {
@@ -52,4 +56,23 @@ async function registerInitialExchangeRate() {
   console.log("save success");
 }
 
-registerInitialExchangeRate();
+async function updateEntireRate() {
+  const tickers = poloniex.getTickers();
+  const keys = Object.keys(tickers);
+  const promises = keys.map(key => {
+    ExchangeRate.updateTicker(key, tickers[key]);
+  });
+  try {
+    await Promise.all(promises);
+  } catch (e) {
+    console.error(e);
+    return;
+  }
+  console.log("Update entrie rate!");
+}
+
+db.connect();
+socket.connect();
+
+// registerInitialExchangeRate();
+updateEntireRate();
