@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const User = require("db/models/User");
 const { optionsPerCurrency } = require("lib/variables");
+const CONST = require("../variables");
 
 exports.localRegister = async ctx => {
   const { body } = ctx.request;
@@ -13,8 +14,8 @@ exports.localRegister = async ctx => {
       .email()
       .required(),
     password: Joi.string()
-      .min(6)
-      .max(30),
+      .min(CONST.PASS_MIN)
+      .max(CONST.PASS_MAX),
     initialMoney: Joi.object({
       currency: Joi.string()
         .allow("BTC", "USD", "BTC")
@@ -85,5 +86,67 @@ exports.localRegister = async ctx => {
     });
   } catch (e) {
     ctx.throw(e, 500);
+  }
+};
+
+exports.localLogin = async ctx => {
+  const { body } = ctx.request;
+
+  const schema = Joi.object({
+    email: Joi.string()
+      .email()
+      .required(),
+    password: Joi.string()
+      .min(CONST.PASS_MIN)
+      .max(CONST.PASS_MAX)
+  });
+
+  const result = Joi.validate(body, schema);
+  if (result.error) {
+    ctx.error = CONST.ERR_BAD_REQUEST;
+    ctx.body = {
+      reason: result.error
+    };
+    return;
+  }
+
+  try {
+    const { email, password } = body;
+    const user = await User.findByEmail(email);
+
+    if (!user) {
+      ctx.error = CONST.ERR_FORBIDDEN;
+      ctx.body = {
+        reason: "email not exist"
+      };
+      return;
+    }
+
+    const validated = user.validatePassword(password);
+    if (!validated) {
+      ctx.error = CONST.ERR_FORBIDDEN;
+      ctx.body = {
+        reason: "password not valid"
+      };
+      return;
+    }
+
+    const accessToken = await user.generateToken();
+
+    ctx.cookies.set("access_token", accessToken, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7
+    });
+
+    const { displayName, _id, metaInfo } = user;
+
+    ctx.body = {
+      _id,
+      displayName
+      // metaInfo
+    };
+    return;
+  } catch (e) {
+    ctx.throw(e, CONST.ERR_INTERNAL_ERR);
   }
 };
