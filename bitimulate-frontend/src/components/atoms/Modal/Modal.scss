@@ -1,1 +1,31 @@
 @import "utils";
+
+.modal-wrapper {
+  // places the modal at center
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: z-index-for("modal");
+
+  &.uncenter {
+    top: 1rem;
+    transform: translate(-50%);
+  }
+
+  &.mobile-fullscreen {
+    @include media("<medium") {
+      top: 0;
+      left: 0;
+      transform: none;
+
+      .enter,
+      .leave {
+        animation: none;
+      }
+      .leave {
+        display: none;
+      }
+    }
+  }
+}
