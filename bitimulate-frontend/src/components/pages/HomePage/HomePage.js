@@ -1,15 +1,11 @@
 import React from "react";
 
-import {
-  Header,
-  PageTemplate,
-  PolyBackground,
-  IntroQuestion
-} from "components";
+import { PageTemplate, PolyBackground, IntroQuestion } from "components";
+import HeaderContainer from "containers/HeaderContainer";
 
 const HomePage = () => {
   return (
-    <PageTemplate header={<Header />}>
+    <PageTemplate header={<HeaderContainer />}>
       <PolyBackground>
         <IntroQuestion />
       </PolyBackground>
