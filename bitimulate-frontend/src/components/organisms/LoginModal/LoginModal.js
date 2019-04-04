@@ -5,7 +5,14 @@ import { Modal, Input, Button } from "components";
 
 const cx = classNames.bind(styles);
 
-const LoginModal = ({ visible, mode, onChangeInput, onChangeMode }) => {
+const LoginModal = ({
+  visible,
+  mode,
+  email,
+  password,
+  onChangeInput,
+  onChangeMode
+}) => {
   return (
     <Modal visible={visible}>
       <div className={cx("login-modal")}>
@@ -13,10 +20,16 @@ const LoginModal = ({ visible, mode, onChangeInput, onChangeMode }) => {
         <div className={cx("content")}>
           <h3>Login</h3>
           <div className={cx("form")}>
-            <Input name="name" placeholder="name" onChange={onChangeInput} />
+            <Input
+              name="email"
+              placeholder="email"
+              value={email}
+              onChange={onChangeInput}
+            />
             <Input
               name="password"
               placeholder="password"
+              value={password}
               onChange={onChangeInput}
               type="password"
             />

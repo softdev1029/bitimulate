@@ -4,8 +4,8 @@ import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);
 
-const Modal = ({visible}) => {
-  return <div className={cx("logo")}>Hi</div>;
+const Modal = ({ visible, children }) => {
+  return <div>{children}</div>;
 };
 
 export default Modal;
