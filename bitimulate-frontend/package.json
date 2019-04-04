@@ -63,7 +63,9 @@
   "scripts": {
     "start": "cross-env NODE_PATH=src node scripts/start.js",
     "build": "cross-env NODE_PATH=src node scripts/build.js",
-    "test": "cross-env NODE_PATH=src node scripts/test.js"
+    "test": "cross-env NODE_PATH=src node scripts/test.js",
+    "storybook": "cross-env NODE_PATH=src start-storybook -p 6006",
+    "build-storybook": "cross-env NODE_PATH=src build-storybook"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -125,6 +127,10 @@
     ]
   },
   "devDependencies": {
-    "node-sass": "^4.11.0"
+    "node-sass": "^4.11.0",
+    "@storybook/react": "^5.0.6",
+    "@storybook/addon-actions": "^5.0.6",
+    "@storybook/addon-links": "^5.0.6",
+    "@storybook/addons": "^5.0.6"
   }
 }

@@ -1,0 +1,4 @@
+@import "utils";
+.screen-mask {
+  z-index: z-index-for("screen-mask");
+}
