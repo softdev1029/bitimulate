@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import onClickOutside from "react-onclickoutside";
+import validate from "validate.js";
 import * as baseActions from "store/modules/base";
 import * as authActions from "store/modules/auth";
 import { LoginModal } from "components";
@@ -27,26 +28,57 @@ class LoginModalContainer extends Component {
       value
     });
   };
+  handleRegister = () => {
+    
+    // validate email and password
 
+    const constraints = {
+      email: {
+        email: {
+          message: () => "^잘못된 형식의 이메일입니다."
+        }
+      },
+      password: {
+        length: {
+          minimum: 6,
+          tooShort: "^비밀번호는 %{count}자 이상 입력하세요."
+        }
+      }
+    };
+
+    const form = this.props.form.toJS();
+    console.log('registering... ='+form.password);
+
+    const error = validate(form, constraints);
+    console.log(error);
+
+    const { AuthActions } = this.props;
+    AuthActions.setError(null);
+    if (error) {
+      AuthActions.setError(error);
+    }
+  };
   shouldComponentUpdate(nextProps, nextState) {
-    console.log('LoginModalContainer:showComponentUpdate:'+nextProps.visible);
+    console.log("LoginModalContainer:showComponentUpdate:" + nextProps.visible);
     return true;
   }
   componentDidMount() {
-    console.log('LoginModalContainer:didMount');
+    console.log("LoginModalContainer:didMount");
     return true;
   }
   render() {
-    const { handleChangeInput } = this;
-    const { visible, email, password } = this.props;
-    console.log("LoginModalContainer:"+visible);
+    const { handleChangeInput, handleRegister } = this;
+    const { visible, email, password, error } = this.props;
+    console.log("LoginModalContainer:" + visible);
 
     return (
       <LoginModal
         visible={visible}
         email={email}
         password={password}
+        error={error}
         onChangeInput={handleChangeInput}
+        onRegister={handleRegister}
       />
     );
   }
@@ -54,9 +86,9 @@ class LoginModalContainer extends Component {
 
 export default connect(
   state => ({
-    visible: state.auth.getIn(['auth', 'visible']),
-    email: state.auth.getIn(['auth', 'visible']),
-    passwod: state.auth.getIn(['auth', 'visible']),
+    visible: state.auth.get("visible"),
+    form: state.auth.get("form"),
+    error: state.auth.get("error")
   }),
   dispatch => ({
     BaseActions: bindActionCreators(baseActions, dispatch),

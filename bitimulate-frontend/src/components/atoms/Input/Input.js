@@ -5,7 +5,7 @@ import classNames from "classnames/bind";
 const cx = classNames.bind(styles);
 
 const Input = ({ className, ...rest }) => {
-  return <input className={cx(className)} {...rest} />;
+  return <input className={cx(className, "input")} {...rest} />;
 };
 
 export default Input;
