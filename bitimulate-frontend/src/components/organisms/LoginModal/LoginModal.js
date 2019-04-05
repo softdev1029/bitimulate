@@ -13,6 +13,7 @@ const LoginModal = ({
   onChangeInput,
   onChangeMode
 }) => {
+  console.log("LoginModal:"+visible);
   return (
     <Modal visible={visible}>
       <div className={cx("login-modal")}>

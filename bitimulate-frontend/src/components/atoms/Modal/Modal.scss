@@ -1,5 +1,19 @@
 @import "utils";
 
+.enter {
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
+  animation-name: bounceUpIn;
+}
+
+.leave {
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
+  animation-name: bounceDownOut;
+}
+
 .modal-wrapper {
   // places the modal at center
   position: fixed;
