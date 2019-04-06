@@ -5,7 +5,6 @@ import classNames from "classnames/bind";
 const cx = classNames.bind(styles);
 
 const InputError = ({ children, error, noMarginTop, ...rest }) => {
-  console.log("error=" + error);
   if (!error) return null;
   return (
     <div

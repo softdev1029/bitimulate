@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./LoginModal.scss";
 import classNames from "classnames/bind";
-import { Modal, Input, Button, InputError } from "components";
+import { Modal, Input, Button, InputError, TextButton } from "components";
 
 const cx = classNames.bind(styles);
 
@@ -13,9 +13,12 @@ const LoginModal = ({
   error,
   onChangeInput,
   onChangeMode,
-  onRegister
+  onAuth
 }) => {
-  console.log("LoginModal:" + visible);
+  const isLogin = mode === 'login';
+  const modeText = isLogin ? 'Login' : 'Signup';
+  const invertedText = isLogin ? 'Signup' : 'Login';
+
   const { email: emailError, password: passwordError } = error ? error.toJS() : {};
   return (
     <Modal visible={visible}>
@@ -47,10 +50,17 @@ const LoginModal = ({
               flex
               padding="0.6rem"
               className={cx("login")}
-              onClick={onRegister}
+              onClick={onAuth}
             >
-              Register
+              {modeText}
             </Button>
+            <div className={cx('login-foot')}>
+              <TextButton>Forget Password</TextButton>
+              <TextButton right onClick={onChangeMode}>{invertedText}</TextButton>
+            </div>
+            <div className={cx('separator')}>
+              <div className={cx('or')}>OR</div>
+            </div>
           </div>
         </div>
       </div>

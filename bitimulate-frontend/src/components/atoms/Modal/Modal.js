@@ -6,7 +6,6 @@ import CSSTransitionGroup from "react-transition-group/CSSTransitionGroup";
 const cx = classNames.bind(styles);
 
 const Modal = ({ visible, children }) => {
-  console.log("Modal:"+visible);
   return (
     <div className="modal-wrapper">
       <CSSTransitionGroup

@@ -22,13 +22,16 @@ class LoginModalContainer extends Component {
   handleChangeInput = e => {
     const { AuthActions } = this.props;
     const { name, value } = e.target;
-    console.log(name + ":" + value);
     AuthActions.changeInput({
       name,
       value
     });
   };
-  handleRegister = () => {
+  handleChangeMode = () => {
+    const { AuthActions } = this.props;
+    AuthActions.changeMode();
+  };
+  handleLogin = () => {
     
     // validate email and password
 
@@ -47,10 +50,8 @@ class LoginModalContainer extends Component {
     };
 
     const form = this.props.form.toJS();
-    console.log('registering... ='+form.password);
 
     const error = validate(form, constraints);
-    console.log(error);
 
     const { AuthActions } = this.props;
     AuthActions.setError(null);
@@ -58,18 +59,51 @@ class LoginModalContainer extends Component {
       AuthActions.setError(error);
     }
   };
+  handleRegister = async () => {
+    
+    // validate email and password
+
+    const constraints = {
+      email: {
+        email: {
+          message: () => "^잘못된 형식의 이메일입니다."
+        }
+      },
+      password: {
+        length: {
+          minimum: 6,
+          tooShort: "^비밀번호는 %{count}자 이상 입력하세요."
+        }
+      }
+    };
+
+    const form = this.props.form.toJS();
+    const { email, password } = form;
+
+    const error = validate(form, constraints);
+
+    const { AuthActions } = this.props;
+    AuthActions.setError(null);
+    if (error) {
+      AuthActions.setError(error);
+      return;
+    }
+
+    try {
+      await AuthActions.checkEmail(email);
+    } catch (e) {
+      return;
+    }
+  };
   shouldComponentUpdate(nextProps, nextState) {
-    console.log("LoginModalContainer:showComponentUpdate:" + nextProps.visible);
     return true;
   }
   componentDidMount() {
-    console.log("LoginModalContainer:didMount");
     return true;
   }
   render() {
-    const { handleChangeInput, handleRegister } = this;
-    const { visible, email, password, error } = this.props;
-    console.log("LoginModalContainer:" + visible);
+    const { handleChangeInput, handleLogin, handleRegister, handleChangeMode } = this;
+    const { mode, visible, email, password, error } = this.props;
 
     return (
       <LoginModal
@@ -77,8 +111,10 @@ class LoginModalContainer extends Component {
         email={email}
         password={password}
         error={error}
+        mode={mode}
         onChangeInput={handleChangeInput}
-        onRegister={handleRegister}
+        onChangeMode={handleChangeMode}
+        onAuth={mode === "login" ? handleLogin : handleRegister}
       />
     );
   }
@@ -88,7 +124,8 @@ export default connect(
   state => ({
     visible: state.auth.get("visible"),
     form: state.auth.get("form"),
-    error: state.auth.get("error")
+    error: state.auth.get("error"),
+    mode: state.auth.get("mode")
   }),
   dispatch => ({
     BaseActions: bindActionCreators(baseActions, dispatch),

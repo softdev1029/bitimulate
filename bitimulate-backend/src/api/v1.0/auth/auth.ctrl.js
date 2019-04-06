@@ -3,6 +3,23 @@ const User = require("db/models/User");
 const { optionsPerCurrency } = require("lib/variables");
 const CONST = require("../variables");
 
+exports.checkEmail = async ctx => {
+  const { email } = ctx.params;
+  if (!email) {
+    ctx.status = CONST.ERR_BAD_REQUEST;
+    return;
+  }
+  try {
+    const result = await User.findByEmail(email);
+    console.log(result);
+    ctx.body = {
+      exists: !!result
+    };
+  } catch (e) {
+    ctx.throw(e, CONST.ERR_INTERNAL_ERR);
+  }
+  return;
+};
 exports.localRegister = async ctx => {
   const { body } = ctx.request;
 
