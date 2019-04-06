@@ -2,6 +2,7 @@ import React, { Component } from "react";
 // import redux dependencies
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { withRouter } from 'react-router';
 import onClickOutside from "react-onclickoutside";
 import validate from "validate.js";
 import * as baseActions from "store/modules/base";
@@ -32,7 +33,6 @@ class LoginModalContainer extends Component {
     AuthActions.changeMode();
   };
   handleLogin = () => {
-    
     // validate email and password
 
     const constraints = {
@@ -60,7 +60,6 @@ class LoginModalContainer extends Component {
     }
   };
   handleRegister = async () => {
-    
     // validate email and password
 
     const constraints = {
@@ -94,6 +93,9 @@ class LoginModalContainer extends Component {
     } catch (e) {
       return;
     }
+    const { history } = this.props;
+
+    history.push("/register");
   };
   shouldComponentUpdate(nextProps, nextState) {
     return true;
@@ -102,7 +104,12 @@ class LoginModalContainer extends Component {
     return true;
   }
   render() {
-    const { handleChangeInput, handleLogin, handleRegister, handleChangeMode } = this;
+    const {
+      handleChangeInput,
+      handleLogin,
+      handleRegister,
+      handleChangeMode
+    } = this;
     const { mode, visible, email, password, error } = this.props;
 
     return (
@@ -131,4 +138,4 @@ export default connect(
     BaseActions: bindActionCreators(baseActions, dispatch),
     AuthActions: bindActionCreators(authActions, dispatch)
   })
-)(onClickOutside(LoginModalContainer));
+)(withRouter(onClickOutside(LoginModalContainer)));
