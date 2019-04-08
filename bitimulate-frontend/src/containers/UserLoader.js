@@ -18,15 +18,16 @@ class UserLoader extends Component {
     }
 
     try {
-      await UserActions.checkLoginStatus();
-      await UserActions.getMetaInfo();
-      await UserActions.getWallet();
+      //await UserActions.checkLoginStatus();
+      //await UserActions.getMetaInfo();
+      //await UserActions.getWallet();
       if(!user || (user && user._id !== this.props.user.get('_id'))) {
         // if there is any change in login status, resave the user info
         storage.set('__BTM_USER__', this.props.user.toJS());
       }
     } catch (e) {
       // if there is an error, removes the data from the storage
+      console.log(e);
       storage.remove('__BTM_USER__');
       return;
     }

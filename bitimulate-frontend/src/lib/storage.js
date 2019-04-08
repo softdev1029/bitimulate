@@ -1,5 +1,6 @@
 export default (function() {
   const st = localStorage || { };
+  console.log('storage:='+localStorage);
   return {
     set: (key, object) => {
       console.log('storage:set:key='+key+",obj="+object);
@@ -21,6 +22,7 @@ export default (function() {
       }
     },
     remove: (key) => {
+      console.log('storage:remove:');
       if(localStorage) {
         return localStorage.removeItem(key);
       }
