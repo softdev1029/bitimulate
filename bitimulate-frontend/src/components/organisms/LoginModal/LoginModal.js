@@ -19,7 +19,11 @@ const LoginModal = ({
   const modeText = isLogin ? 'Login' : 'Signup';
   const invertedText = isLogin ? 'Signup' : 'Login';
 
-  const { email: emailError, password: passwordError } = error ? error.toJS() : {};
+  const {
+    email: emailError,
+    password: passwordError,
+    localLogin: localLoginError,
+   } = error ? error.toJS() : {};
   return (
     <Modal visible={visible}>
       <div className={cx("login-modal")}>
@@ -27,6 +31,7 @@ const LoginModal = ({
         <div className={cx("content")}>
           <h3>Login</h3>
           <div>
+            <InputError error={localLoginError} noMarginTop/>
             <Input
               name="email"
               placeholder="email"

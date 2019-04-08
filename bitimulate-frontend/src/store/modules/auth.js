@@ -9,6 +9,7 @@ const CHANGE_MODE = "auth/CHANGE_MODE";
 const TOGGLE_LOGIN_MODAL = "auth/TOGGLE_LOGIN_MODAL";
 const SET_ERROR = "auth/SET_ERROR";
 const CHECK_EMAIL = "auth/CHECK_EMAIL";
+const LOCAL_LOGIN  = 'auth/LOCAL_LOGIN';
 
 // action creator
 export const changeInput = createAction(CHANGE_INPUT);
@@ -16,6 +17,7 @@ export const changeMode = createAction(CHANGE_MODE);
 export const toggleLoginModal = createAction(TOGGLE_LOGIN_MODAL);
 export const setError = createAction(SET_ERROR); // ({ email, password }) [nullable]
 export const checkEmail = createAction(CHECK_EMAIL, AuthAPI.checkEmail);
+export const localLogin = createAction(LOCAL_LOGIN, AuthAPI.localLogin); // ({email, password})
 
 // initial state
 const initialState = Map({
@@ -44,7 +46,7 @@ export default handleActions(
       return state.setIn(["form", name], value);
     },
     [CHANGE_MODE]: (state, action) => {
-      console.log(CHANGE_MODE);
+      // console.log(CHANGE_MODE+'a');
       return state.set("mode", state.get("mode") === "login" ? "register" : "login");
     },
     [SET_ERROR]: (state, action) => {

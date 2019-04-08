@@ -8,6 +8,7 @@ import validate from "validate.js";
 import * as baseActions from "store/modules/base";
 import * as authActions from "store/modules/auth";
 import { LoginModal } from "components";
+import { toJS } from 'immutable';
 
 class LoginModalContainer extends Component {
   handleClose = () => {
@@ -29,34 +30,25 @@ class LoginModalContainer extends Component {
     });
   };
   handleChangeMode = () => {
+    console.log('handleChangeMode:prev_mode=' + this.props.mode);
     const { AuthActions } = this.props;
     AuthActions.changeMode();
   };
-  handleLogin = () => {
-    // validate email and password
+  handleLogin = async () => {
+    console.log('handleLogin');
+    const { AuthActions, UserActions, form, loginResult } = this.props;
+    const { email, password } = form.toJS();
+    console.log(form.toJS());
+    console.log("email="+email);
 
-    const constraints = {
-      email: {
-        email: {
-          message: () => "^잘못된 형식의 이메일입니다."
-        }
-      },
-      password: {
-        length: {
-          minimum: 6,
-          tooShort: "^비밀번호는 %{count}자 이상 입력하세요."
-        }
-      }
-    };
-
-    const form = this.props.form.toJS();
-
-    const error = validate(form, constraints);
-
-    const { AuthActions } = this.props;
-    AuthActions.setError(null);
-    if (error) {
-      AuthActions.setError(error);
+    try {
+      await AuthActions.localLogin({
+        email, password
+      });
+      UserActions.setUser(loginResult);
+      AuthActions.setError(null);
+      this.handleClose();
+    } catch (e) {
     }
   };
   handleRegister = async () => {
