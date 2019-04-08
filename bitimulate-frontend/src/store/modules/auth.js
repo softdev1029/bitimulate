@@ -26,7 +26,8 @@ const initialState = Map({
     password: ""
   }),
   visible: false,
-  mode: "login"
+  mode: "login",
+  loginResult: null,
 });
 
 // reducer
@@ -61,7 +62,21 @@ export default handleActions(
                     ? state.set('error', Map({email: '이미 존재하는 이메일입니다.'}))
                     : state;
       },
-    })
+    }),
+    ...pender({
+      type: LOCAL_LOGIN,
+      onSuccess: (state, action) => {
+        const { data: loginResult } = action.payload;
+        console.log('LOCAL_LOGIN:onSuccess:loginResult=');
+        console.log(loginResult);
+        return state.set('loginResult', loginResult);
+      },
+      onFailure: (state, action) => {
+        return state.set('error', fromJS({
+          localLogin: ['잘못된 계정 정보입니다.']
+        }))
+      }
+    }),
   },
   initialState
 );

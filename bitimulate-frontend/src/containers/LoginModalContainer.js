@@ -7,8 +7,10 @@ import onClickOutside from "react-onclickoutside";
 import validate from "validate.js";
 import * as baseActions from "store/modules/base";
 import * as authActions from "store/modules/auth";
+import * as userActions from "store/modules/user";
 import { LoginModal } from "components";
 import { toJS } from 'immutable';
+import storage from 'lib/storage';
 
 class LoginModalContainer extends Component {
   handleClose = () => {
@@ -30,21 +32,20 @@ class LoginModalContainer extends Component {
     });
   };
   handleChangeMode = () => {
-    console.log('handleChangeMode:prev_mode=' + this.props.mode);
     const { AuthActions } = this.props;
     AuthActions.changeMode();
   };
   handleLogin = async () => {
-    console.log('handleLogin');
-    const { AuthActions, UserActions, form, loginResult } = this.props;
+    const { AuthActions, UserActions, form } = this.props;
     const { email, password } = form.toJS();
-    console.log(form.toJS());
-    console.log("email="+email);
 
     try {
       await AuthActions.localLogin({
         email, password
       });
+      const { loginResult } = this.props;
+      console.log("loginResult="+loginResult);
+      storage.set('__BTM_USER__', loginResult);
       UserActions.setUser(loginResult);
       AuthActions.setError(null);
       this.handleClose();
@@ -127,10 +128,12 @@ export default connect(
     visible: state.auth.get("visible"),
     form: state.auth.get("form"),
     error: state.auth.get("error"),
-    mode: state.auth.get("mode")
+    mode: state.auth.get("mode"),
+    loginResult: state.auth.get("loginResult")
   }),
   dispatch => ({
     BaseActions: bindActionCreators(baseActions, dispatch),
-    AuthActions: bindActionCreators(authActions, dispatch)
+    AuthActions: bindActionCreators(authActions, dispatch),
+    UserActions: bindActionCreators(userActions, dispatch)
   })
 )(withRouter(onClickOutside(LoginModalContainer)));

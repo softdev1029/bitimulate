@@ -4,11 +4,16 @@ import styles from "./Header.scss";
 
 import classNames from "classnames/bind";
 
-import { Logo, HeaderNav, Button } from "components";
+import { Logo, HeaderNav, Button, UserButton } from "components";
 
 const cx = classNames.bind(styles);
 
-const Header = ({ onLoginButtonClick }) => {
+const Header = ({
+  onLoginButtonClick,
+  user
+}) => {
+  console.log("Header:user");
+  console.log(user);
   return (
     <div className={cx("header")}>
       <div className={cx("responsive")}>
@@ -17,13 +22,19 @@ const Header = ({ onLoginButtonClick }) => {
         </div>
         <div className={cx("right-side")}>
           <HeaderNav />
-          <Button
-            invert
-            className={cx("login-button")}
-            onClick={onLoginButtonClick}
-          >
-            로그인
-          </Button>
+          {
+            user ? (
+              <UserButton displayName={user.get('displayName')} />
+            ) : (
+              <Button
+              invert
+              className={cx("login-button")}
+              onClick={onLoginButtonClick}
+            >
+              로그인
+            </Button>   
+            )
+          }
         </div>
       </div>
     </div>

@@ -15,13 +15,15 @@ class HeaderContainer extends Component {
 
   render() {
     const { handleLoginButtonClick } = this;
+    const { user } = this.props;
 
-    return <Header onLoginButtonClick={handleLoginButtonClick} />;
+    return <Header user={user} onLoginButtonClick={handleLoginButtonClick} />;
   }
 }
 
 export default connect(
   state => ({
+    user: state.user.get('user')
   }),
   dispatch => ({
     BaseActions: bindActionCreators(baseActions, dispatch),

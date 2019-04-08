@@ -38,6 +38,8 @@ const initialState = Map({
 export default handleActions({
     [SET_USER]: (state, action) => {
       const { payload: user } = action;
+      console.log('user:SET_USER:');
+      console.log(user);
       return state.set('user', Map(user))
                   .set('logged', true);
     },
