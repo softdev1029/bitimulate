@@ -5,7 +5,7 @@ import {
   PolyBackground,
   Paper
 } from 'components';
-import {HeaderContainer} from 'containers';
+import {HeaderContainer,RegisterFormContainer} from 'containers';
 import styles from './RegisterPage.scss';
 import classNames from 'classnames/bind';
 import { Helmet } from 'react-helmet';
@@ -38,7 +38,7 @@ class RegisterPage extends Component {
         </PolyBackground>
         <Paper>
           <RegisterTemplate>
-            {/* <RegisterFormContainer/> */}
+            <RegisterFormContainer/>
           </RegisterTemplate>
         </Paper>
       </PageTemplate>

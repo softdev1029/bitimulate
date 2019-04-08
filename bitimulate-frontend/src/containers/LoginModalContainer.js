@@ -95,7 +95,10 @@ class LoginModalContainer extends Component {
     }
     const { history } = this.props;
 
-    history.push("/register");
+    setTimeout(() => {
+      history.push("/register");
+      this.handleClose();
+    }, 2000);
   };
   shouldComponentUpdate(nextProps, nextState) {
     return true;

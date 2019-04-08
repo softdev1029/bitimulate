@@ -20,6 +20,23 @@ exports.checkEmail = async ctx => {
   }
   return;
 };
+exports.checkDisplayName = async ctx => {
+  const { displayName } = ctx.params;
+  if (!displayName) {
+    ctx.status = CONST.ERR_BAD_REQUEST;
+    return;
+  }
+  try {
+    const result = await User.findByDisplayName(displayName);
+    console.log(result);
+    ctx.body = {
+      exists: !!result
+    };
+  } catch (e) {
+    ctx.throw(e, CONST.ERR_INTERNAL_ERR);
+  }
+  return;
+};
 exports.localRegister = async ctx => {
   const { body } = ctx.request;
 
