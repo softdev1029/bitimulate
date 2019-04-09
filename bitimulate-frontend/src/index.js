@@ -5,6 +5,9 @@ import "styles/main.scss";
 import Root from "Root";
 import * as serviceWorker from "./serviceWorker";
 import store from "store";
+import social from 'lib/social';
+
+window.social = social;
 
 const render = Component =>
   ReactDOM.render(
